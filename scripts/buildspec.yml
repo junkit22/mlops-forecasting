@@ -1,0 +1,15 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - pip install -r requirements.txt
+  build:
+    commands:
+      - python src/train.py
+  post_build:
+    commands:
+      - aws s3 cp models/model.joblib s3://my-bucket/model/
+artifacts:
+  files:
+    - models/model.joblib
