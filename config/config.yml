@@ -1,0 +1,4 @@
+hyperparameters:
+  n_estimators: 100
+environment:
+  aws_region: us-east-1
