@@ -1,12 +1,18 @@
 import joblib
 import pandas as pd
+from flask import Flask, request, jsonify
 
-def predict(model_path, input_data_path):
-    model = joblib.load(model_path)
-    input_data = pd.read_csv(input_data_path).drop(columns=['sales'])
-    prediction = model.predict(input_data)
-    return prediction
+app = Flask(__name__)
+
+# Load the model
+model = joblib.load('models/model.joblib')
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    data = request.json['data']
+    df = pd.DataFrame(data)
+    predictions = model.predict(df)
+    return jsonify(predictions.tolist())
 
 if __name__ == "__main__":
-    predictions = predict('models/model.joblib', 'data/processed/cleaned_sales_data.csv')
-    print(predictions)
+    app.run(host='0.0.0.0', port=5000)
